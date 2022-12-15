@@ -1,0 +1,42 @@
+<use name="FWCore/Framework"/>
+<use name="FWCore/PluginManager"/>
+<use name="FWCore/ParameterSet"/>
+<use name="DataFormats/TrackReco"/>
+<use name="DataFormats/Luminosity"/>
+<use name="SimDataFormats/CaloHit"/>
+<use name="DataFormats/JetReco"/>
+<use name="DataFormats/EcalRecHit"/>
+<use name="DataFormats/EcalDetId"/>
+<use name="Geometry/CaloGeometry"/>
+<use name="Geometry/CSCGeometry"/>
+<use name="Geometry/DTGeometry"/>
+<use name="Geometry/RPCGeometry"/>
+<use name="DataFormats/CaloTowers"/>
+<use name="DataFormats/HepMCCandidate"/>
+<use name="CommonTools/UtilAlgos"/>
+<use name="PhysicsTools/UtilAlgos"/>
+<use name="DataFormats/GeometryVector"/>
+<use name="DataFormats/Math"/>
+<use name="DataFormats/METReco"/>
+<use name="DataFormats/VertexReco"/>
+<use name="CondFormats/JetMETObjects"/>
+<use name="JetMETCorrections/Objects"/>
+<use name="SimDataFormats/PileupSummaryInfo"/>
+<use name="DataFormats/GeometryCommonDetAlgo"/>
+<use name="TrackingTools/Records"/>
+<use name="RecoLocalCalo/EcalRecAlgos"/>
+<use name="TrackingTools/TransientTrack"/>
+<use name="TrackingTools/IPTools"/>
+<use name="DataFormats/L1Trigger"/>
+<use name="DataFormats/L1TCalorimeter"/>
+<use name="DataFormats/Common"/>
+<use name="HLTrigger/HLTcore"/>
+<use name="SimDataFormats/GeneratorProducts"/>
+<use name="RecoJets/JetProducers"/>
+
+<use name="FWCore/Utilities"/>
+<use name="GeneratorInterface/Core"/>
+
+
+<flags EDM_PLUGIN="1"/>
+<flags EDM_PLUGIN="1"/>
