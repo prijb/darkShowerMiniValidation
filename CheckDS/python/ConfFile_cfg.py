@@ -1,8 +1,26 @@
 import FWCore.ParameterSet.Config as cms
-
+L1Info = ["L1_DoubleMu0", "L1_DoubleMu0_Mass_Min1", "L1_DoubleMu0_OQ",
+ "L1_DoubleMu0_SQ", "L1_DoubleMu0_SQ_OS", "L1_DoubleMu0er1p4_SQ_OS_dR_Max1p4",
+ "L1_DoubleMu0er1p5_SQ", "L1_DoubleMu0er1p5_SQ_OS",
+ "L1_DoubleMu0er1p5_SQ_OS_dR_Max1p4", "L1_DoubleMu0er1p5_SQ_dR_Max1p4",
+ "L1_DoubleMu0er2p0_SQ_OS_dR_Max1p4", "L1_DoubleMu0er2p0_SQ_dR_Max1p4",
+ "L1_DoubleMu10_SQ", "L1_DoubleMu18er2p1", "L1_DoubleMu4_SQ_OS",
+ "L1_DoubleMu4_SQ_OS_dR_Max1p2", "L1_DoubleMu4p5_SQ_OS",
+ "L1_DoubleMu4p5_SQ_OS_dR_Max1p2", "L1_DoubleMu4p5er2p0_SQ_OS",
+ "L1_DoubleMu4p5er2p0_SQ_OS_Mass7to18", "L1_DoubleMu9_SQ", "L1_DoubleMu_12_5",
+ "L1_DoubleMu_15_5_SQ", "L1_DoubleMu_15_7", "L1_DoubleMu_15_7_Mass_Min1",
+ "L1_DoubleMu_15_7_SQ",
+ ]
 process = cms.Process("Demo")
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20000) )
-process.demo = cms.EDAnalyzer('CheckDS')
+process.demo = cms.EDAnalyzer('CheckDS',
+l1Seeds =  cms.vstring(L1Info),
+doL1 = cms.bool(True),
+ AlgInputTag = cms.InputTag("gtStage2Digis"),
+        l1tAlgBlkInputTag = cms.InputTag("gtStage2Digis"),
+        l1tExtBlkInputTag = cms.InputTag("gtStage2Digis"),
+ReadPrescalesFromFile=cms.bool(False)
+)
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.load("Configuration.StandardSequences.Services_cff")
@@ -22,7 +40,7 @@ process.load('TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorsN
 process.load('JetMETCorrections.Configuration.JetCorrectors_cff')
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-
+process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v15', '')
 
 process.source = cms.Source("PoolSource",
     # replace 'myfile.root' with the source file you want to use
@@ -251,5 +269,23 @@ process.source = cms.Source("PoolSource",
 process.TFileService = cms.Service("TFileService",
                                                fileName = cms.string("file:test.root")
                                                                                   )
-
+'''
+slimmedMuonsWithUserData = cms.EDProducer("PATMuonUserDataEmbedder",
+     src = cms.InputTag("slimmedMuons"),
+     userFloats = cms.PSet(
+        miniIsoChg = cms.InputTag("isoForMu:miniIsoChg"),
+        miniIsoAll = cms.InputTag("isoForMu:miniIsoAll"),
+        ptRatio = cms.InputTag("ptRatioRelForMu:ptRatio"),
+        ptRel = cms.InputTag("ptRatioRelForMu:ptRel"),
+        jetNDauChargedMVASel = cms.InputTag("ptRatioRelForMu:jetNDauChargedMVASel"),
+     ),
+     userCands = cms.PSet(
+        jetForLepJetVar = cms.InputTag("ptRatioRelForMu:jetForLepJetVar") # warning: Ptr is null if no match is found
+     ),
+)
+finalMuons = cms.EDFilter("PATMuonRefSelector",
+    src = cms.InputTag("slimmedMuonsWithUserData"),
+    cut = cms.string("pt > 3 && (passed('CutBasedIdLoose') || passed('SoftCutBasedId') || passed('SoftMvaId') || passed('CutBasedIdGlobalHighPt') || passed('CutBasedIdTrkHighPt'))")
+)
+'''
 process.p = cms.Path(process.demo)
