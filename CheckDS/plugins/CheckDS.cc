@@ -4,9 +4,7 @@
 // Class:      CheckDS
 //
 /**\class CheckDS CheckDS.cc CheckGen/CheckDS/plugins/CheckDS.cc
-
 Description: [one line class summary]
-
 Implementation:
 [Notes on implementation]
 */
@@ -129,7 +127,7 @@ class CheckDS : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
         std::vector<float> *  muon_eta = new std::vector<float>();
         std::vector<bool> *  muon_isLoose = new std::vector<bool>();
         std::vector<float> *  muon_dxy = new std::vector<float>();
-
+	std::vector<float> * muon_dxyerr = new std::vector<float>();
 
         TH1D * pdgIdHist;
         TH1D * ptHist;
@@ -187,6 +185,7 @@ CheckDS::CheckDS(const edm::ParameterSet& iConfig)
     outputTree->Branch("muon_eta",&muon_eta);
     outputTree->Branch("muon_isLoose",&muon_isLoose);
     outputTree->Branch("muon_dxy",&muon_dxy);
+    outputTree->Branch("muon_dxyerr",&muon_dxyerr);
     outputTree->Branch("muon_dz",&muon_dz);
 
     pdgIdHist = fs->make<TH1D>("pdgId","pdgId",300,0,300);
@@ -241,6 +240,7 @@ CheckDS::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     muon_eta->clear();
     muon_isLoose->clear();
     muon_dxy->clear();
+    muon_dxyerr->clear();
     muon_dz->clear();
 
     if (doL1_){
@@ -299,10 +299,12 @@ CheckDS::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         muon_isLoose->push_back(muon.isLooseMuon());
         if (muon.innerTrack().isNonnull()){
             muon_dxy->push_back(muon.innerTrack()->dxy(*beamSpot));
+            muon_dxyerr->push_back(muon.innerTrack()->dxyError());
             muon_dz->push_back(muon.innerTrack()->dz(beamSpot->position()));
         }
         else{
             muon_dxy->push_back(-1.);
+            muon_dxyerr->push_back(-1.);
             muon_dz->push_back(-1.);
         }
     }
@@ -310,7 +312,7 @@ CheckDS::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     ///Can ignore everything below here -
     ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>> beamSpotVertex;
     for(auto genParticle : *genParticles){
-        const reco::GenParticle * genParticleMother = dynamic_cast<const reco::GenParticle *>(genParticle.mother());    
+        const reco::GenParticle * genParticleMother = dynamic_cast<const reco::GenParticle *>(genParticle.mother());
         while (genParticleMother && !(abs(genParticleMother->pdgId()) == 4900113)){
             // if (genParticleMother->mother() == 0) break;
             genParticleMother =  dynamic_cast<const reco::GenParticle *>(genParticleMother->mother());
@@ -327,7 +329,7 @@ CheckDS::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
             double displacementGluino = TMath::Sqrt((neutralinoPos-parentPos).Mag2());
             double ctau = displacementGluino*10 / (genParticleBeta*genParticleGamma);
             ctauHist->Fill(ctau);
-            dispHist->Fill(displacementGluino); 
+            dispHist->Fill(displacementGluino);
             if (genParticle.status() == 1){
                 outputVecId.push_back(genParticle.pdgId());
                 outputVecStatus.push_back(genParticle.status());
@@ -427,7 +429,7 @@ CheckDS::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                                     float dphi = deltaPhi(genMu1.vertex(),mu1.p4()+mu2.p4());
                                     // if (mu1.innerTrack()){
                                     //     if (mu2.innerTrack()){
-                                    // 
+                                    //
                                     if (mu1.muonBestTrack().isNonnull() && mu2.muonBestTrack().isNonnull()){
                                         mu1TrackTrans = (*theB).build (mu1.muonBestTrack());
                                         mu2TrackTrans = (*theB).build (mu2.muonBestTrack());
@@ -493,7 +495,7 @@ CheckDS::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                                     // GlobalPoint vertex1 = GlobalPoint(
                                     //         mu1Track.innerPosition().x(), mu1Track.innerPosition().y(), mu1Track.innerPosition().z() );
-                                    // GlobalVector momentum1 = GlobalVector( 
+                                    // GlobalVector momentum1 = GlobalVector(
                                     //         mu1Track.innerMomentum().x(), mu1Track.innerMomentum().y(), mu1Track.innerMomentum().z() );
                                     //
                                     // GlobalTrajectoryParameters trackParams( vertex1, momentum1, mu1Track.charge(), bField_ );

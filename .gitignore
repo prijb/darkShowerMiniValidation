@@ -1,0 +1,4 @@
+# ROOT files
+*.root
+# Log files
+*.log
