@@ -1,10 +1,10 @@
 # darkShowerMiniValidation
 
-Source cms installation then do (from slc6):
+Source cms installation then do (from slc7):
 ```bash
-cmsrel CMSSW_10_2_27
-cd CMSSW_10_2_27/src
-git clone git@github.com:mcitron/darkShowerMiniValidation.git CheckGen
+cmsrel CMSSW_12_4_9
+cd CMSSW_12_4_9/src
+git clone git@github.com:prijb/darkShowerMiniValidation.git CheckGen
 scramv1 b -j 8
 ```
 

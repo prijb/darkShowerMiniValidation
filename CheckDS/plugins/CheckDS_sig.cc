@@ -248,7 +248,7 @@ CheckDS_sig::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         l1GtUtils_->retrieveL1(iEvent, iSetup, algToken_);
         for (auto const& l1seed:l1Seeds_){
             bool l1htbit = 0;
-            int prescale = -1;
+            double prescale = -1;
             l1GtUtils_->getFinalDecisionByName(l1seed, l1htbit);
             l1GtUtils_->getPrescaleByName(l1seed, prescale);
             l1_result->push_back(l1htbit);

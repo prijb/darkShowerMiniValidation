@@ -33,8 +33,8 @@ L1Info = ["L1_DoubleMu0", "L1_DoubleMu0_Mass_Min1", "L1_DoubleMu0_OQ",
 
 process = cms.Process("Demo")
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20000) )
+process.MessageLogger.cerr.FwkReport.reportEvery = 1
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 
@@ -54,9 +54,9 @@ process.load("Configuration.EventContent.EventContent_cff")
 process.load("Configuration.StandardSequences.GeometryRecoDB_cff")
 process.load("Configuration.StandardSequences.EndOfProcess_cff")
 process.load("Configuration.StandardSequences.MagneticField_38T_cff")
-process.load(
-    "Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff"
-)
+#process.load(
+#    "Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff"
+#)
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load("Configuration.StandardSequences.Reconstruction_cff")
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
@@ -66,13 +66,15 @@ process.load('TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorsN
 process.load('JetMETCorrections.Configuration.JetCorrectors_cff')
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v15', '')
+#Change for 2022 MC Production
+#process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v15', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '124X_mcRun3_2022_realistic_v12', '')
 
 
 process.source = cms.Source("PoolSource",
     # replace 'myfile.root' with the source file you want to use
-    #fileNames = fname
-    fileNames = cms.untracked.vstring("/store/user/mcitron/ProjectMetis/HiddenValley_vector_m_2_ctau_10_xiO_1_xiL_1_privateMC_11X_MINIAODSIM_v7_generationForBParkingAddFullGenAddDisp/output_1.root")
+    fileNames = fname
+    #fileNames = cms.untracked.vstring("/store/user/mcitron/ProjectMetis/HiddenValley_vector_m_2_ctau_10_xiO_1_xiL_1_privateMC_11X_MINIAODSIM_v7_generationForBParkingAddFullGenAddDisp/output_1.root")
     #fileNames = cms.untracked.vstring("/store/mc/RunIISummer20UL18MiniAODv2/MinBias_TuneCP2_13TeV-pythia8/MINIAODSIM/FSUL18_pilot_106X_upgrade2018_realistic_v16_L1v1_ext1-v2/50000/24AD2EE9-05EF-DA4B-8660-4996045D0D71.root")
     #fileNames = cms.untracked.vstring("/store/mc/RunIISummer20UL18MiniAODv2/MinBias_TuneCP5_13TeV-pythia8/MINIAODSIM/FSUL18_pilot_106X_upgrade2018_realistic_v16_L1v1-v2/2430000/79986FDF-72AB-CD45-80ED-EB4AB63A90E9.root")
 )
