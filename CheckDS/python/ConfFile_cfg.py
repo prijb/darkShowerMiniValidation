@@ -1,10 +1,10 @@
 import FWCore.ParameterSet.Config as cms
 import FWCore.Utilities.FileUtils as FileUtils
 
-do_sig = False
+do_sig = True
 
-filelist_sig = FileUtils.loadListFromFile("data/sigList.txt")
-filelist_bkg = FileUtils.loadListFromFile("data/bkgListQCD.txt")
+filelist_sig = FileUtils.loadListFromFile("CheckDS/data/sigList.txt")
+filelist_bkg = FileUtils.loadListFromFile("CheckDS/data/bkgListQCD.txt")
 #filelist_bkg = FileUtils.loadListFromFile("data/bkgListZero.txt")
 readFiles_sig = cms.untracked.vstring(*filelist_sig)
 readFiles_bkg = cms.untracked.vstring(*filelist_bkg)
@@ -32,7 +32,9 @@ L1Info = ["L1_DoubleMu0", "L1_DoubleMu0_Mass_Min1", "L1_DoubleMu0_OQ",
  ]
 
 process = cms.Process("Demo")
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2000000) )
+process.load("FWCore.MessageService.MessageLogger_cfi")
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20000) )
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 
@@ -69,7 +71,8 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v15
 
 process.source = cms.Source("PoolSource",
     # replace 'myfile.root' with the source file you want to use
-    fileNames = fname
+    #fileNames = fname
+    fileNames = cms.untracked.vstring("/store/user/mcitron/ProjectMetis/HiddenValley_vector_m_2_ctau_10_xiO_1_xiL_1_privateMC_11X_MINIAODSIM_v7_generationForBParkingAddFullGenAddDisp/output_1.root")
     #fileNames = cms.untracked.vstring("/store/mc/RunIISummer20UL18MiniAODv2/MinBias_TuneCP2_13TeV-pythia8/MINIAODSIM/FSUL18_pilot_106X_upgrade2018_realistic_v16_L1v1_ext1-v2/50000/24AD2EE9-05EF-DA4B-8660-4996045D0D71.root")
     #fileNames = cms.untracked.vstring("/store/mc/RunIISummer20UL18MiniAODv2/MinBias_TuneCP5_13TeV-pythia8/MINIAODSIM/FSUL18_pilot_106X_upgrade2018_realistic_v16_L1v1-v2/2430000/79986FDF-72AB-CD45-80ED-EB4AB63A90E9.root")
 )
